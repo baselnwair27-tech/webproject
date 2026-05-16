@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Assistive</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-icon">A</div>
+        <div>
+          <h1>Smart Assistive</h1>
+          <p>Accessibility for caregivers and people with vision challenges.</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#features">Features</a>
+        <a href="#pages">App Pages</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container" id="overview">
+      <div class="hero-copy">
+        <p class="eyebrow">Mobile app project</p>
+        <h2>Smart Assistive</h2>
+        <p>Designing an intuitive companion app for caregivers and visually impaired users. This project highlights accessibility, real-time status, and easy navigation across app pages.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#pages">See App Pages</a>
+          <a class="btn btn-secondary" href="#features">Features</a>
+        </div>
+      </div>
+      <div class="mockup-card">
+        <div class="mockup-header">
+          <span class="mockup-title">Caregiver Menu</span>
+          <span class="mockup-subtitle">Choose a section</span>
+        </div>
+        <ul class="menu-list">
+          <li><button type="button" class="menu-button active" data-screen="blind-status">Blind Status</button></li>
+          <li><button type="button" class="menu-button" data-screen="history">History</button></li>
+          <li><button type="button" class="menu-button" data-screen="device-status">Device Status</button></li>
+          <li><button type="button" class="menu-button" data-screen="ai-chat">AI Chat</button></li>
+          <li><button type="button" class="menu-button" data-screen="contact-us">Contact Us</button></li>
+        </ul>
+        <button class="footer-link" data-screen="settings">Settings</button>
+
+        <div class="screen-preview">
+          <div class="screen-view active" data-screen="blind-status">
+            <p class="screen-badge red">Emergency Alert</p>
+            <h4>SOS</h4>
+            <div class="screen-row">
+              <span>Date</span>
+              <strong id="emergencyDate">2026-04-28</strong>
+            </div>
+            <div class="screen-row">
+              <span>Time</span>
+              <strong id="emergencyTime">17:45:07</strong>
+            </div>
+            <button type="button" class="subscreen-button" data-screen="blind-status-detail">View details</button>
+          </div>
+
+          <div class="screen-view" data-screen="blind-status-detail">
+            <p class="screen-badge red">Blind Status Detail</p>
+            <h4>Blind status page</h4>
+            <p>Displays the user condition, any detected hazard, and the current assistive status for the caregiver.</p>
+            <div class="screen-row">
+              <span>Status</span>
+              <strong>Monitoring active</strong>
+            </div>
+            <div class="screen-row">
+              <span>Hazard</span>
+              <strong>None detected</strong>
+            </div>
+            <div class="screen-row">
+              <span>Recommendation</span>
+              <strong>Stay on route</strong>
+            </div>
+            <button type="button" class="subscreen-button" data-screen="blind-status">Back</button>
+          </div>
+
+          <div class="screen-view" data-screen="history">
+            <p class="screen-badge orange">History</p>
+            <h4>Emergency History</h4>
+            <div class="history-events" id="historyEvents">
+              <div class="screen-row">
+                <span>Date</span>
+                <strong>2026-04-28</strong>
+              </div>
+              <div class="screen-row">
+                <span>Time</span>
+                <strong>17:45:07</strong>
+              </div>
+            </div>
+            <button class="clear-history">Clear History</button>
+          </div>
+
+          <div class="screen-view" data-screen="device-status">
+            <p class="screen-badge yellow">Device Status</p>
+            <h4>Device is Not Active</h4>
+            <p>Waiting for device update and checking WiFi connection.</p>
+            <div class="screen-row">
+              <span>Device Status</span>
+              <strong>Checking...</strong>
+            </div>
+            <div class="screen-row">
+              <span>WiFi Status</span>
+              <strong>Checking...</strong>
+            </div>
+          </div>
+
+          <div class="screen-view" data-screen="ai-chat">
+            <p class="screen-badge blue">AI Caregiver Chat</p>
+            <h4>Ask about the system</h4>
+            <div class="chat-log" id="chatLog">
+              <div class="chat-bubble bubble-message">Hello! I am the caregiver assistant. Ask me about the emergency alert, location monitoring, safe zone, GPS, or how this app helps.</div>
+            </div>
+            <div class="chat-suggestions">
+              <button class="chat-suggestion">How does this app help?</button>
+              <button class="chat-suggestion">What is the emergency alert?</button>
+              <button class="chat-suggestion">What is the safe zone?</button>
+              <button class="chat-suggestion">What does the open current location button do?</button>
+            </div>
+            <div class="chat-input">
+              <input id="chatInput" type="text" placeholder="Ask about the system..." />
+              <button id="sendButton" type="button">Send</button>
+            </div>
+          </div>
+
+          <div class="screen-view" data-screen="contact-us">
+            <p class="screen-badge purple">Contact Us</p>
+            <h4>Get help quickly</h4>
+            <a class="screen-row contact-row" href="mailto:adhamabouebrahim@gmail.com">
+              <span>Email</span>
+              <strong>adhamabouebrahim@gmail.com</strong>
+            </a>
+            <a class="screen-row contact-row" href="tel:+96181895186">
+              <span>Phone</span>
+              <strong>+96181895186</strong>
+            </a>
+            <a class="screen-row contact-row" href="https://www.instagram.com/blind_assistive_system?igsh=MW42eXA1NzFyMDNndA%3D%3D&utm_source=qr" target="_blank" rel="noreferrer">
+              <span>Instagram</span>
+              <strong>@blind_assistive_system</strong>
+            </a>
+            <a class="screen-row contact-row" href="https://www.facebook.com/share/1HWUaBaQAZ/?mibextid=wwXIfr" target="_blank" rel="noreferrer">
+              <span>Facebook</span>
+              <strong>Smart blind assistive system</strong>
+            </a>
+          </div>
+
+          <div class="screen-view" data-screen="settings">
+            <p class="screen-badge gray">Settings</p>
+            <h4>Theme</h4>
+            <p id="themeLabel">Light mode</p>
+            <button id="themeButton" type="button" class="theme-toggle-btn">Switch to Dark Mode</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-light container" id="features">
+      <h3>Key features</h3>
+      <div class="feature-grid">
+        <article>
+          <h4>Caregiver dashboard</h4>
+          <p>Monitor blind status, device health, and history from a single accessible menu.</p>
+        </article>
+        <article>
+          <h4>AI chat support</h4>
+          <p>Ask the app for guidance, insights, and help with assistive workflows.</p>
+        </article>
+        <article>
+          <h4>Easy navigation</h4>
+          <p>Clean menu design with labels and icons for fast access to every page.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container app-pages" id="pages">
+      <h3>App page previews</h3>
+      <div class="page-grid">
+        <article class="page-card">
+          <div class="page-card-head">
+            <span class="page-icon alert">!</span>
+            <h4>Emergency Alert</h4>
+          </div>
+          <p>Displays urgent SOS alerts with date and time so the caregiver can respond fast.</p>
+          <p class="tag red">Emergency status</p>
+        </article>
+
+        <article class="page-card">
+          <div class="page-card-head">
+            <span class="page-icon safe">✓</span>
+            <h4>Location Monitoring</h4>
+          </div>
+          <p>Shows safe-zone status, GPS coordinates, and current location details.</p>
+          <p class="tag green">Safe zone tracking</p>
+        </article>
+
+        <article class="page-card">
+          <div class="page-card-head">
+            <span class="page-icon history">⏱</span>
+            <h4>Emergency History</h4>
+          </div>
+          <p>Logs previous alerts and timestamps, with a clear history control for caregivers.</p>
+          <p class="tag orange">Activity timeline</p>
+        </article>
+
+        <article class="page-card">
+          <div class="page-card-head">
+            <span class="page-icon device">⚙</span>
+            <h4>Device Status</h4>
+          </div>
+          <p>Reports whether the device is active, connected, and ready for monitoring.</p>
+          <p class="tag yellow">Device health</p>
+        </article>
+
+        <article class="page-card">
+          <div class="page-card-head">
+            <span class="page-icon chat">💬</span>
+            <h4>AI Caregiver Chat</h4>
+          </div>
+          <p>Offers conversational guidance with prompts, questions, and support responses.</p>
+          <p class="tag blue">Smart assistance</p>
+        </article>
+
+        <article class="page-card">
+          <div class="page-card-head">
+            <span class="page-icon contact">✉</span>
+            <h4>Contact Us</h4>
+          </div>
+          <p>Contains email, phone, Instagram, and Facebook contact options for help.</p>
+          <p class="tag purple">Caregiver support</p>
+        </article>
+
+        <article class="page-card">
+          <div class="page-card-head">
+            <span class="page-icon settings">⚙︎</span>
+            <h4>Settings</h4>
+          </div>
+          <p>Let users choose the app theme and personalize their accessibility experience.</p>
+          <p class="tag gray">Personalization</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="detail-section container" id="blind-status">
+      <h3>Blind Status</h3>
+      <div class="detail-card">
+        <p>This screen shows the caregiver menu with the blind status option. In the app, pressing this opens status details and alerts for the user who needs assistance.</p>
+      </div>
+    </section>
+
+    <section class="detail-section container" id="history">
+      <h3>Emergency History</h3>
+      <div class="detail-card">
+        <p>This screen displays previous alerts and timestamps. It helps caregivers track events and review past emergency responses.</p>
+      </div>
+    </section>
+
+    <section class="detail-section container" id="device-status">
+      <h3>Device Status</h3>
+      <div class="detail-card">
+        <p>This screen reports whether the device is active and connected. It shows current device health and WiFi status so caregivers know the system is working.</p>
+      </div>
+    </section>
+
+    <section class="detail-section container" id="ai-chat">
+      <h3>AI Caregiver Chat</h3>
+      <div class="detail-card">
+        <p>This screen is the app’s chat assistant. Caregivers can ask about emergency alerts, location monitoring, safe zones, and how to use the system.</p>
+      </div>
+    </section>
+
+    <section class="detail-section container" id="contact-us">
+      <h3>Contact Us</h3>
+      <div class="detail-card">
+        <p>This screen provides contact options: email, phone, Instagram, and Facebook. It makes it easy to reach support whenever needed.</p>
+      </div>
+    </section>
+
+    <section class="detail-section container" id="settings">
+      <h3>Settings</h3>
+      <div class="detail-card">
+        <p>This screen lets users select the app theme and personalize the experience. In the mobile app, it appears as the final option in the caregiver menu.</p>
+      </div>
+    </section>
+
+    <section class="container section-light" id="contact">
+      <h3>Contact & support</h3>
+      <p>For questions about the app, reach out by email, phone, or social media. This website is designed to showcase the full Smart Assistive experience.</p>
+      <div class="support-grid">
+        <div class="support-card">
+          <h4>Email</h4>
+          <p><a class="support-link" href="mailto:adhamabouebrahim@gmail.com">adhamabouebrahim@gmail.com</a></p>
+        </div>
+        <div class="support-card">
+          <h4>Phone</h4>
+          <p><a class="support-link" href="tel:+96181895186">+96181895186</a></p>
+        </div>
+        <div class="support-card">
+          <h4>Instagram</h4>
+          <p><a class="support-link" href="https://www.instagram.com/blind_assistive_system?igsh=MW42eXA1NzFyMDNndA%3D%3D&utm_source=qr" target="_blank" rel="noreferrer">@blind_assistive_system</a></p>
+        </div>
+        <div class="support-card">
+          <h4>Facebook</h4>
+          <p><a class="support-link" href="https://www.facebook.com/share/1HWUaBaQAZ/?mibextid=wwXIfr" target="_blank" rel="noreferrer">Smart blind assistive system</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-light container" id="firebase">
+      <h3>Live Firebase data</h3>
+      <p>This section loads your Firebase Realtime Database data automatically.</p>
+      <pre id="firebaseOutput">Connecting to Firebase...</pre>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>These pages reflect the full Smart Assistive app experience, from monitoring to emergency alerts and caregiver support.</p>
+      <p class="footer-note">Built as a clean, responsive showcase website.</p>
+    </div>
+  </footer>
+  <script>
+    const menuButtons = document.querySelectorAll('.menu-button, .footer-link');
+    const screenViews = document.querySelectorAll('.screen-view');
+    const chatLog = document.getElementById('chatLog');
+    const chatInput = document.getElementById('chatInput');
+    const sendButton = document.getElementById('sendButton');
+    const suggestionButtons = document.querySelectorAll('.chat-suggestion');
+
+    const historyEvents = document.getElementById('historyEvents');
+    const clearHistoryButton = document.querySelector('.clear-history');
+    const subscreenButtons = document.querySelectorAll('.subscreen-button');
+    const themeButton = document.getElementById('themeButton');
+    const themeLabel = document.getElementById('themeLabel');
+    const firebaseOutput = document.getElementById('firebaseOutput');
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmH7FYrkqsGNJ0ILRTNQZl5nTzC2HFCZM",
+      authDomain: "blind-assist-system123.firebaseapp.com",
+      databaseURL: "https://blind-assist-system123-default-rtdb.firebaseio.com/",
+      projectId: "blind-assist-system123",
+      storageBucket: "blind-assist-system123.appspot.com",
+      messagingSenderId: "",
+      appId: ""
+    };
+
+    if (firebaseOutput && window.firebase) {
+      try {
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const rootRef = db.ref('/');
+        rootRef.on('value', (snapshot) => {
+          const data = snapshot.val();
+          firebaseOutput.textContent = JSON.stringify(data, null, 2);
+          
+          // Update emergency date and time if available in Firebase
+          if (data && data.emergencyAlert) {
+            if (data.emergencyAlert.date) {
+              const emergencyDateEl = document.getElementById('emergencyDate');
+              if (emergencyDateEl) {
+                emergencyDateEl.textContent = data.emergencyAlert.date;
+              }
+            }
+            if (data.emergencyAlert.time) {
+              const emergencyTimeEl = document.getElementById('emergencyTime');
+              if (emergencyTimeEl) {
+                emergencyTimeEl.textContent = data.emergencyAlert.time;
+              }
+            }
+          }
+        }, (error) => {
+          firebaseOutput.textContent = 'Firebase read failed: ' + error.message;
+        });
+      } catch (error) {
+        firebaseOutput.textContent = 'Firebase init failed: ' + error.message;
+      }
+    } else if (firebaseOutput) {
+      firebaseOutput.textContent = 'Firebase SDK not loaded yet.';
+    }
+
+    const answers = {
+      help: 'Smart Assistive helps caregivers monitor blind status, device health, emergency alerts, and location tracking in one app.',
+      alert: 'Emergency Alert shows SOS status, date, and time when the assisted person needs immediate help.',
+      safezone: 'Safe zone indicates whether the assisted person is inside a trusted location. It is shown in location monitoring.',
+      location: 'The location monitor screen shows GPS coordinates, date, and time and can open the current location for the caregiver.',
+      openlocation: 'The Open current location button opens a map or location view to show where the assisted person is now.',
+      default: 'I can help with emergency alerts, location monitoring, safe zones, GPS coordinates, and caregiver support. Please ask one of those questions.'
+    };
+
+    function addMessage(text, type) {
+      const bubble = document.createElement('div');
+      bubble.className = `chat-bubble ${type}`;
+      bubble.textContent = text;
+      chatLog.appendChild(bubble);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function getAnswer(question) {
+      const q = question.toLowerCase();
+      if (q.includes('how') && q.includes('help')) return answers.help;
+      if (q.includes('emergency') && q.includes('alert')) return answers.alert;
+      if (q.includes('safe zone') || q.includes('safezone')) return answers.safezone;
+      if (q.includes('open current location') || q.includes('current location')) return answers.openlocation;
+      if (q.includes('location') || q.includes('gps')) return answers.location;
+      return answers.default;
+    }
+
+    function sendChat() {
+      const question = chatInput.value.trim();
+      if (!question) return;
+      addMessage(question, 'bubble-user');
+      chatInput.value = '';
+      setTimeout(() => {
+        addMessage(getAnswer(question), 'bubble-message');
+      }, 300);
+    }
+
+    suggestionButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        chatInput.value = button.textContent;
+        sendChat();
+      });
+    });
+
+    function clearHistory() {
+      const rows = historyEvents.querySelectorAll('.screen-row');
+      rows.forEach(row => row.remove());
+      historyEvents.innerHTML = '<div class="history-empty">No history entries found.</div>';
+      if (clearHistoryButton) {
+        clearHistoryButton.textContent = 'History cleared';
+        clearHistoryButton.disabled = true;
+      }
+    }
+
+    if (clearHistoryButton) {
+      clearHistoryButton.addEventListener('click', clearHistory);
+    }
+
+    if (subscreenButtons.length) {
+      subscreenButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const screenId = button.dataset.screen;
+          screenViews.forEach(screen => {
+            screen.classList.toggle('active', screen.dataset.screen === screenId);
+          });
+        });
+      });
+    }
+
+    if (themeButton) {
+      themeButton.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        const isDark = document.body.classList.contains('dark-theme');
+        themeLabel.textContent = isDark ? 'Dark mode' : 'Light mode';
+        themeButton.textContent = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        if (isDark) {
+          themeButton.textContent = 'Dark Mode On';
+        } else {
+          themeButton.textContent = 'Switch to Dark Mode';
+        }
+      });
+    }
+
+    sendButton.addEventListener('click', sendChat);
+
+    chatInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        sendChat();
+      }
+    });
+
+    menuButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const screenId = button.dataset.screen;
+        menuButtons.forEach(btn => {
+          btn.classList.toggle('active', btn === button);
+        });
+        screenViews.forEach(screen => {
+          screen.classList.toggle('active', screen.dataset.screen === screenId);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
