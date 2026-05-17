@@ -368,6 +368,16 @@
           
           // Update emergency date and time if available in Firebase
           if (data && data.emergencyAlert) {
+            const historyDateEl = document.getElementById('historyDate');
+const historyTimeEl = document.getElementById('historyTime');
+
+if (historyDateEl) {
+  historyDateEl.textContent = data.emergencyAlert.date || 'No date';
+}
+
+if (historyTimeEl) {
+  historyTimeEl.textContent = data.emergencyAlert.time || 'No time';
+}
             if (data.emergencyAlert.date) {
               const emergencyDateEl = document.getElementById('emergencyDate');
               if (emergencyDateEl) {
