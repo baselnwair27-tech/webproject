@@ -553,9 +553,8 @@ section[id] {
   }
 }
 .hero-logo{
-  width:120px;
+  width:300px;
   height:auto;
-  margin-bottom:20px;
-  border-radius:20px;
-display:block;
+  display:block;
+  margin-bottom:30px; 
 }
