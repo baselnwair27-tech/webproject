@@ -370,27 +370,27 @@
           firebaseOutput.textContent = JSON.stringify(data, null, 2);
           
           // Update emergency date and time if available in Firebase
-          if (data && data.emergencyAlert) {
+          if (data && data.emergency) {
             const historyDateEl = document.getElementById('historyDate');
 const historyTimeEl = document.getElementById('historyTime');
 
 if (historyDateEl) {
-  historyDateEl.textContent = data.emergencyAlert.date || 'No date';
+  historyDateEl.textContent = data.emergency.date || 'No date';
 }
 
 if (historyTimeEl) {
-  historyTimeEl.textContent = data.emergencyAlert.time || 'No time';
+  historyTimeEl.textContent = data.emergency.time || 'No time';
 }
-            if (data.emergencyAlert.date) {
+            if (data.emergency.date) {
               const emergencyDateEl = document.getElementById('emergencyDate');
               if (emergencyDateEl) {
-                emergencyDateEl.textContent = data.emergencyAlert.date;
+                emergencyDateEl.textContent = data.emergency.date;
               }
             }
-            if (data.emergencyAlert.time) {
+            if (data.emergency.time) {
               const emergencyTimeEl = document.getElementById('emergencyTime');
               if (emergencyTimeEl) {
-                emergencyTimeEl.textContent = data.emergencyAlert.time;
+                emergencyTimeEl.textContent = data.emergency.time;
               }
             }
           }
