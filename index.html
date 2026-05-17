@@ -360,49 +360,59 @@
       appId: ""
     };
 
-    if (firebaseOutput && window.firebase) {
-      try {
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const rootRef = db.ref('/');
-        rootRef.on('value', (snapshot) => {
-          const data = snapshot.val();
-          firebaseOutput.textContent = JSON.stringify(data, null, 2);
-          
-          // Update emergency date and time if available in Firebase
-          if (data && data.emergency) {
-            const historyDateEl = document.getElementById('historyDate');
-const historyTimeEl = document.getElementById('historyTime');
+   if (firebaseOutput && window.firebase) {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const rootRef = db.ref('/');
 
-if (historyDateEl) {
-  historyDateEl.textContent = data.emergency.date || 'No date';
-}
+    rootRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      firebaseOutput.textContent = JSON.stringify(data, null, 2);
 
-if (historyTimeEl) {
-  historyTimeEl.textContent = data.emergency.time || 'No time';
-}
-            if (data.emergency.date) {
-              const emergencyDateEl = document.getElementById('emergencyDate');
-              if (emergencyDateEl) {
-                emergencyDateEl.textContent = data.emergency.date;
-              }
-            }
-            if (data.emergency.time) {
-              const emergencyTimeEl = document.getElementById('emergencyTime');
-              if (emergencyTimeEl) {
-                emergencyTimeEl.textContent = data.emergency.time;
-              }
-            }
-          }
-        }, (error) => {
-          firebaseOutput.textContent = 'Firebase read failed: ' + error.message;
-        });
-      } catch (error) {
-        firebaseOutput.textContent = 'Firebase init failed: ' + error.message;
+      // Emergency date and time
+      if (data && data.emergency) {
+        const emergencyDateEl = document.getElementById('emergencyDate');
+        const emergencyTimeEl = document.getElementById('emergencyTime');
+        const historyDateEl = document.getElementById('historyDate');
+        const historyTimeEl = document.getElementById('historyTime');
+
+        if (emergencyDateEl) {
+          emergencyDateEl.textContent = data.emergency.date || 'No date';
+        }
+
+        if (emergencyTimeEl) {
+          emergencyTimeEl.textContent = data.emergency.time || 'No time';
+        }
+
+        if (historyDateEl) {
+          historyDateEl.textContent = data.emergency.date || 'No date';
+        }
+
+        if (historyTimeEl) {
+          historyTimeEl.textContent = data.emergency.time || 'No time';
+        }
       }
-    } else if (firebaseOutput) {
-      firebaseOutput.textContent = 'Firebase SDK not loaded yet.';
-    }
+
+      // Device and WiFi status
+      if (data && data.device_status) {
+        updateDeviceStatus(
+          data.device_status.device || 'Unknown',
+          data.device_status.wifi || 'Unknown',
+          false
+        );
+      }
+
+    }, (error) => {
+      firebaseOutput.textContent = 'Firebase read failed: ' + error.message;
+    });
+
+  } catch (error) {
+    firebaseOutput.textContent = 'Firebase init failed: ' + error.message;
+  }
+} else if (firebaseOutput) {
+  firebaseOutput.textContent = 'Firebase SDK not loaded yet.';
+}
 
     const answers = {
       help: 'Smart Assistive helps caregivers monitor blind status, device health, emergency alerts, and location tracking in one app.',
